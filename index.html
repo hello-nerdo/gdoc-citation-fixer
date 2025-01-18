@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Markdown References Cleanup</title>
+</head>
+<body>
+  <h1>Markdown References Cleanup</h1>
+  <p>Paste your "Before" Markdown below, then click "Transform" to see the "After" result.</p>
+
+  <textarea id="inputText" rows="20" cols="80" placeholder="Paste your Markdown here..."></textarea>
+  <br><br>
+
+  <button onclick="cleanupMarkdown()">Transform</button>
+  <br><br>
+
+  <textarea id="outputText" rows="20" cols="80" placeholder="Transformed Markdown will appear here..."></textarea>
+
+  <script>
+    function cleanupMarkdown() {
+      let text = document.getElementById("inputText").value;
+      // 1) Convert inline references like "performance1." to "performance[^1]."
+      //    This looks for any word character followed by one or more digits, 
+      //    then a literal period, ensuring that the period is followed by a space or newline. 
+      //    Example: "performance1." => "performance[^1]."
+      text = text.replace(/(\w)(\d+)(\.)\s/g, '$1[^$2]$3 '); // Added \s to ensure a space or newline follows the period
+      
+      // Additionally, check for numbers at the end of sentences after a quote
+      // This captures cases like: '... or "describe a memorable event in your life." 7'
+      text = text.replace(/("\s*.*?\.")\s*(\d+)/g, '$1 [^$2]'); // Matches quoted sentences followed by a number
+
+      // 2) Convert lines in the "Works cited" section from "1. Some text" to "[^1]: Some text"
+      //    We first find the index of "#### **Works cited**", then only apply
+      //    the line replacement to text after that heading.
+      const worksCitedIndex = text.indexOf('#### **Works cited**');
+      if (worksCitedIndex !== -1) {
+        // Split the text into two parts:
+        //   - everything before the Works cited heading
+        //   - everything from the heading onwards
+        const before = text.substring(0, worksCitedIndex);
+        let after = text.substring(worksCitedIndex);
+
+        // Replace lines of the form "1. Some reference" or "1\. Some reference" with "[^1]: Some reference"
+        // We'll do this using a multiline global match on lines that start with digits and a period (escaped or not).
+        after = after.replace(/^(\d+)\\?\.\s+(.*)$/gm, '[^$1]: $2');
+
+        // Recombine
+        text = before + after;
+      }
+
+      // Display the result
+      document.getElementById("outputText").value = text;
+    }
+  </script>
+</body>
+</html>
