@@ -2,7 +2,7 @@
 
 Transform Google Docs citations into proper Markdown footnotes and references
 
-![UI Screenshot](/UI.png)
+![UI Screenshot](/ui.jpg)
 
 ## Features
 
@@ -26,5 +26,14 @@ Before:
 According to research1, the data shows promising results2.
 
 #### **Works cited**
-1. Smith, J. (2023). Research Paper
-2. Jones, M. (2024). Data Analysis
+1\. Smith, J. (2023). Research Paper
+2\. Jones, M. (2024). Data Analysis
+```
+
+After:
+```markdown
+According to research[^1], the data shows promising results[^2].
+
+[^1]: Smith, J. (2023). Research Paper
+[^2]: Jones, M. (2024). Data Analysis
+```
