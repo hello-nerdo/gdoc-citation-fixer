@@ -2,7 +2,9 @@
 
 Transform Google Docs citations into proper Markdown footnotes and references
 
-![UI Screenshot](/ui.jpg)
+[![UI Screenshot](/ui.jpg)](https://hello-nerdo.github.io/gdoc-citation-fixer/)
+
+Try the [online version](https://hello-nerdo.github.io/gdoc-citation-fixer/)
 
 ## Features
 
